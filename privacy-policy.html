@@ -35,15 +35,52 @@
         a:hover {
             text-decoration: underline;
         }
+        .language-switcher {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .language-switcher button {
+            background: #3498db;
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .language-switcher button:hover {
+            background: #2980b9;
+        }
     </style>
+    <script>
+        function switchLanguage(language) {
+            const en = document.getElementById('privacy-en');
+            const tr = document.getElementById('privacy-tr');
+            if (language === 'en') {
+                en.style.display = 'block';
+                tr.style.display = 'none';
+            } else {
+                en.style.display = 'none';
+                tr.style.display = 'block';
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Privacy Policy</h1>
-
-        <p>This website does not collect any personally identifiable information (PII) from its users.</p>
-
-        <p>Last updated: <time datetime="2024-06-15">June 15, 2024</time></p>
+        <div class="language-switcher">
+            <button onclick="switchLanguage('en')">English</button>
+            <button onclick="switchLanguage('tr')">Türkçe</button>
+        </div>
+        <div id="privacy-en">
+            <h1>Privacy Policy</h1>
+            <p>This website does not collect any personally identifiable information (PII) from its users.</p>
+            <p>Last updated: <time datetime="2024-06-24">June 24, 2024</time></p>
+        </div>
+        <div id="privacy-tr" style="display: none;">
+            <h1>Gizlilik Politikası</h1>
+            <p>Bu web sitesi, kullanıcılarından herhangi bir kişisel olarak tanımlanabilir bilgi toplamaz.</p>
+            <p>Son güncelleme: <time datetime="2024-06-24">24 Haziran 2024</time></p>
+        </div>
     </div>
 </body>
 </html>
