@@ -1,249 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anon File Upload</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        h2 {
-            color: #ffffff;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 5px;
-            display: flex;
-            align-items: center;
-        }
-        h2 img {
-            margin-right: 3px;
-            height: 30px;
-        }
-        form {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        input[type=file] {
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 10px;
-            border: 1px solid #444;
-            border-radius: 4px;
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            box-sizing: border-box;
-        }
-        button[type=submit] {
-            padding: 10px 20px;
-            background-color: skyblue;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            align-self: center;
-        }
-        button[type=submit]:hover {
-            background-color: blue;
-        }
-        .download-link {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #2e2e2e;
-            border: 1px solid #444;
-            border-radius: 4px;
-            word-wrap: break-word;
-        }
-        .footer-links {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .footer-links a {
-            color: #ccc;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        .footer-links a:hover {
-            color: #fff;
-        }
-        .storage-message,
-        .donate-message {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #ccc;
-            word-wrap: break-word;
-        }
-        .donate-message strong {
-            display: block;
-            margin-top: 10px;
-        }
-        progress {
-            width: 100%;
-            height: 10px;
-            margin-top: 10px;
-            display: none;
-        }
-        progress[value] {
-            background-color: #2e2e2e;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
-        }
-        progress[value]::-webkit-progress-value {
-            background-color: skyblue;
-            border-radius: 5px;
-        }
-        progress[value]::-moz-progress-bar {
-            background-color: skyblue;
-            border-radius: 5px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anon File Upload</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      background-color: #0d1117;
+      color: #e6edf3;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-    </style>
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #161b22;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      border: 1px solid #30363d;
+    }
+
+    h2 {
+      color: #ff0000;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #30363d;
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    h2 img {
+      margin-right: 2px;
+      height: 32px;
+    }
+
+    form {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .custom-file-upload,
+    button[type="submit"] {
+      padding: 12px;
+      background: linear-gradient(135deg, #238636, #2ea043);
+      color: #ffffff;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s ease, background 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .custom-file-upload:hover,
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg, #2ea043, #3fb950);
+      transform: scale(1.05);
+    }
+
+    .download-link {
+      margin-top: 15px;
+      padding: 12px;
+      background-color: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      text-align: center;
+      word-wrap: break-word;
+      font-size: 14px;
+      color: #58a6ff;
+    }
+
+    .download-link a {
+      color: #58a6ff;
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .footer-links a {
+      color: #58a6ff;
+      text-decoration: none;
+      margin: 0 8px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #79c0ff;
+    }
+
+    .storage-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      background-color: #21262d;
+      padding: 15px;
+      border-left: 5px solid #2ea043;
+      border-radius: 5px;
+      color: #e6edf3;
+    }
+
+    .storage-message strong {
+      color: #2ea043;
+    }
+
+    .storage-message .warning {
+      color: #e74c3c;
+    }
+
+    progress {
+      width: 100%;
+      height: 12px;
+      margin-top: 12px;
+      display: none;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: #30363d;
+    }
+
+    progress[value]::-webkit-progress-value {
+      background: linear-gradient(90deg, #ffa600, #ff4500);
+      border-radius: 6px;
+    }
+
+    progress[value]::-moz-progress-bar {
+      background: linear-gradient(90deg, #ffa600, #ff4500);
+      border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2><img src="logo.png" alt="Logo">non File Upload</h2>
-        <form id="upload-form">
-            <input type="file" id="file-input" required>
-            <button type="submit">Upload</button>
-            <!-- Progress bar -->
-            <progress id="upload-progress" value="0" max="100"></progress>
-        </form>
+  <div class="container">
+    <h2>
+      <img src="logo.png" alt="Logo">
+      <span>non File Upload</span>
+    </h2>
 
-        <div class="storage-message">
-            Files are encrypted client-side and stored for 30 days. Max. file size: 2GB
-        </div>
+    <form id="upload-form">
+      <label for="file-input" class="custom-file-upload">
+        Choose File
+      </label>
+      <input type="file" id="file-input" required>
+      <button type="submit">Upload</button>
+      <progress id="upload-progress" value="0" max="100"></progress>
+    </form>
 
-        <div class="donate-message">
-            Keep this project alive by donating XMR to address:
-            <strong>87QyZJVYam8GRwj5Tc7WUqJ6mtFu2MRVpSpdH6buaYUbgs2vmx44wiZ33X3yN4gGm44XDaZD3G8WdN3NJPNyC5i8Qr2Xx3J</strong>
-        </div>
-
-        <div id="link-container" class="download-link" style="display: none;">
-            File uploaded successfully. Download link: <a id="download-link" href="#"></a>
-        </div>
-
-        <div class="footer-links">
-            <a href="mailto:nemesisuks@protonmail.com">Report Abuse</a>
-            <a href="https://github.com/umutcamliyurt/Anon-File-Upload" target="_blank">Source Code</a>
-            <a href="/privacy-policy.html">Privacy Policy</a>
-            <a href="/terms-of-use.html">Terms of Use</a>
-        </div>
+    <div class="storage-message">
+      <p>
+        All files are <strong>encrypted on the client side</strong> and stored for up to 360 days. Max file size: 500MB.
+      </p>
+      <p>
+        <strong class="warning">Warning:</strong> Uploading illegal, harmful, or copyrighted material without authorization is strictly prohibited. Violations may lead to legal consequences.
+      </p>
     </div>
 
-    <script>
-        async function generateKey() {
-            return window.crypto.subtle.generateKey(
-                {
-                    name: "AES-GCM",
-                    length: 256,
-                },
-                true,
-                ["encrypt", "decrypt"]
-            );
+    <div id="link-container" class="download-link" style="display: none;">
+      <strong>File uploaded successfully.</strong> Download link: 
+      <a id="download-link" href="#"></a>
+    </div>
+
+    <div class="footer-links">
+      <a href="https://github.com/umutcamliyurt/Anon-File-Upload" target="_blank" rel="noopener">Source Code</a>
+    </div>
+  </div>
+
+  <script>
+    async function generateKey() {
+      return window.crypto.subtle.generateKey(
+        { name: "AES-GCM", length: 256 },
+        true,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    async function encryptFile(file, key) {
+      const iv = window.crypto.getRandomValues(new Uint8Array(12));
+      const algorithm = { name: "AES-GCM", iv: iv };
+
+      const fileBuffer = await file.arrayBuffer();
+      const encryptedBuffer = await window.crypto.subtle.encrypt(
+        algorithm,
+        key,
+        fileBuffer
+      );
+
+      return { iv, encryptedBuffer };
+    }
+
+    async function exportKey(key) {
+      const exported = await window.crypto.subtle.exportKey("raw", key);
+      return Array.from(new Uint8Array(exported))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('file-input');
+      if (fileInput.files.length === 0) {
+        alert('Please select a file.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const key = await generateKey();
+      const { iv, encryptedBuffer } = await encryptFile(file, key);
+      const exportedKey = await exportKey(key);
+
+      const formData = new FormData();
+      formData.append('file', new Blob([iv, encryptedBuffer], { type: file.type }), file.name);
+
+      const progressBar = document.getElementById('upload-progress');
+      progressBar.style.display = 'block';
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'upload.php', true);
+
+      xhr.upload.addEventListener('progress', function(event) {
+        if (event.lengthComputable) {
+          progressBar.value = (event.loaded / event.total) * 100;
         }
+      });
 
-        async function encryptFile(file, key) {
-            const iv = window.crypto.getRandomValues(new Uint8Array(12));
-            const algorithm = {
-                name: "AES-GCM",
-                iv: iv
-            };
-
-            const fileBuffer = await file.arrayBuffer();
-            const encryptedBuffer = await window.crypto.subtle.encrypt(
-                algorithm,
-                key,
-                fileBuffer
-            );
-
-            return { iv, encryptedBuffer };
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const fileName = xhr.responseText;
+          const downloadLink = `${window.location.origin}/download.html#${exportedKey}-${fileName}`;
+          document.getElementById('link-container').style.display = 'block';
+          document.getElementById('download-link').href = downloadLink;
+          document.getElementById('download-link').textContent = downloadLink;
+        } else {
+          alert('File upload failed.');
         }
+        progressBar.style.display = 'none';
+      };
 
-        async function exportKey(key) {
-            const exported = await window.crypto.subtle.exportKey(
-                "raw",
-                key
-            );
-            return Array.from(new Uint8Array(exported)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
+      xhr.onerror = function() {
+        alert('File upload failed. Please try again.');
+        progressBar.style.display = 'none';
+      };
 
-        document.getElementById('upload-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const fileInput = document.getElementById('file-input');
-            if (fileInput.files.length === 0) {
-                alert('Please select a file.');
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const key = await generateKey();
-            const { iv, encryptedBuffer } = await encryptFile(file, key);
-            const exportedKey = await exportKey(key);
-            const formData = new FormData();
-            formData.append('file', new Blob([iv, encryptedBuffer], { type: file.type }), file.name);
-
-            const progressBar = document.getElementById('upload-progress');
-            progressBar.style.display = 'block'; // Show progress bar before upload starts
-
-            const uploadUrl = 'upload.php';
-
-            // Using XMLHttpRequest to monitor upload progress
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', uploadUrl, true);
-
-            // Update progress bar on progress event
-            xhr.upload.addEventListener('progress', function(event) {
-                if (event.lengthComputable) {
-                    const percentComplete = (event.loaded / event.total) * 100;
-                    progressBar.value = percentComplete;
-                }
-            });
-
-            xhr.onload = async function() {
-                if (xhr.status === 200) {
-                    const fileName = xhr.responseText;
-                    const downloadLink = `${window.location.origin}/download.html#${exportedKey}-${fileName}`;
-
-                    // Display the download link on the page
-                    document.getElementById('link-container').style.display = 'block';
-                    document.getElementById('download-link').href = downloadLink;
-                    document.getElementById('download-link').textContent = downloadLink;
-
-                    // Hide progress bar after upload completes
-                    progressBar.style.display = 'none';
-                } else {
-                    alert('File upload failed.');
-                    progressBar.style.display = 'none'; // Hide progress bar on error
-                }
-            };
-
-            xhr.onerror = function() {
-                alert('File upload failed. Please try again.');
-                progressBar.style.display = 'none'; // Hide progress bar on error
-            };
-
-            xhr.send(formData);
-        });
-    </script>
+      xhr.send(formData);
+    });
+  </script>
 </body>
 </html>

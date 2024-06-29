@@ -8,10 +8,11 @@ Anonymous file upload offers several key benefits. Primarily, it ensures user pr
 <!-- FEATURES -->
 ## Features:
 
-- Stores uploaded file for 30 days
+- Stores uploaded file for 10 minutes
+- Randomizes file name for privacy
 - Rate limiting
-- Randomization of uploaded file name for privacy
 - Built in PHP
+- Docker support
 
 ## Technical details:
 
@@ -25,14 +26,18 @@ Anonymous file upload offers several key benefits. Primarily, it ensures user pr
 - Tor (for hosting onionsite)
 - Apache or Nginx web server
 
-<!-- SCREENSHOTS -->
-### Screenshots:
+<!-- SCREENSHOT -->
+### Screenshot:
 
 ![screenshot](image.png)
-
-![screenshot2](image2.png)
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## Donate to support development of this project!
+
+**Monero(XMR):** 88a68f2oEPdiHiPTmCc3ap5CmXsPc33kXJoWVCZMPTgWFoAhhuicJLufdF1zcbaXhrL3sXaXcyjaTaTtcG1CskB4Jc9yyLV
+
+**Bitcoin(BTC):** bc1qn42pv68l6erl7vsh3ay00z8j0qvg3jrg2fnqv9

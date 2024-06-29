@@ -6,10 +6,10 @@
     <title>Download and Decrypt File</title>
     <style>
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            background-color: #121212;
-            color: #e0e0e0;
+            background-color: #0d1117;
+            color: #e6edf3;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -17,58 +17,59 @@
             align-items: center;
             min-height: 100vh;
         }
+
         .container {
             width: 100%;
-            max-width: 600px;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            max-width: 500px;
+            background: #161b22;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid #30363d;
         }
+
         h2 {
             color: #ffffff;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 5px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 8px;
             display: flex;
             align-items: center;
+            font-weight: 600;
         }
-        h2 img {
-            margin-right: 5px;
-            height: 30px;
-        }
+
         #message {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #2e2e2e;
-            border: 1px solid #444;
-            border-radius: 4px;
+            margin-top: 12px;
+            padding: 12px;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            text-align: center;
             word-wrap: break-word;
+            font-size: 14px;
         }
+
         .footer-links {
             margin-top: 20px;
             text-align: center;
         }
+
         .footer-links a {
-            color: #ccc;
+            color: #58a6ff;
             text-decoration: none;
-            margin: 0 10px;
+            margin: 0 8px;
+            transition: color 0.2s ease;
         }
+
         .footer-links a:hover {
-            color: #fff;
+            color: #79c0ff;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2><img src="logo.png" alt="Logo">Download and Decrypt File</h2>
+        <h2>Download and Decrypt File</h2>
         <div id="message">Decrypting file...</div>
-        <div class="footer-links">
-            <a href="mailto:nemesisuks@protonmail.com">Report Abuse</a>
-            <a href="https://github.com/umutcamliyurt/Anon-File-Upload" target="_blank">Source Code</a>
-            <a href="/privacy-policy.html">Privacy Policy</a>
-            <a href="/terms-of-use.html">Terms of Use</a>
-        </div>
     </div>
     <script>
         async function importKey(hexKey) {
