@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// Regenerate session ID to prevent session fixation
+session_regenerate_id(true);
+
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -12,6 +15,28 @@ $maxFileSize = 2 * 1024 * 1024 * 1024; // 2 GB
 
 // Maximum total size for uploads folder (in bytes)
 $maxTotalSize = 40 * 1024 * 1024 * 1024; // 40 GB
+
+// Allowed MIME types
+$allowedMimeTypes = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+    'video/webm', 'video/mp4', 'audio/wav', 'audio/mpeg', 'audio/ogg',
+    'application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed',
+    'application/pdf', 'text/plain', 'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+];
+
+// Allowed file extensions (fallback)
+$allowedExtensions = [
+    'jpg', 'jpeg', 'png', 'gif', 'webp',
+    'webm', 'mp4', 'wav', 'mp3', 'ogg',
+    'zip', 'rar', '7z', 'pdf', 'txt', 'doc', 'docx'
+];
+
+// Set security headers
+header('Content-Security-Policy: default-src \'self\';');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
 
 // Function to calculate directory size recursively
 function getDirectorySize($path)
@@ -68,11 +93,15 @@ function isRateLimited()
         return $timestamp >= $currentTime - 60;
     });
 
+    // Check if rate limit is exceeded
+    if (count($_SESSION['uploads']) >= $maxUploadsPerMinute) {
+        return true;
+    }
+
     // Add current upload to the session
     $_SESSION['uploads'][] = $currentTime;
 
-    // Check if rate limit is exceeded
-    return count($_SESSION['uploads']) > $maxUploadsPerMinute;
+    return false;
 }
 
 // Ensure the request method is POST and the file is uploaded
@@ -89,15 +118,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     // Check for upload errors
     if ($file['error'] !== UPLOAD_ERR_OK) {
         http_response_code(400);
-        echo 'File upload error. Code: ' . $file['error'];
+        echo 'File upload error.';
         exit;
     }
 
-    // Check file size
+    // Validate file size
     if ($file['size'] > $maxFileSize) {
         http_response_code(400);
         echo 'File is too large.';
         exit;
+    }
+
+    // Validate MIME type using finfo
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $fileMimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    // Debug output for MIME type
+    error_log("Detected MIME type: " . $fileMimeType);
+
+    // Check if MIME type is allowed
+    if (!in_array($fileMimeType, $allowedMimeTypes)) {
+        // If MIME type is 'application/octet-stream', check the file extension
+        if ($fileMimeType !== 'application/octet-stream') {
+            http_response_code(400);
+            echo 'Invalid file type. Detected MIME type: ' . htmlspecialchars($fileMimeType, ENT_QUOTES, 'UTF-8');
+            exit;
+        } else {
+            $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+                http_response_code(400);
+                echo 'Invalid file type. Detected MIME type: ' . htmlspecialchars($fileMimeType, ENT_QUOTES, 'UTF-8') . ' with extension: ' . htmlspecialchars($fileExtension, ENT_QUOTES, 'UTF-8');
+                exit;
+            }
+        }
     }
 
     // Ensure upload directory exists
@@ -116,11 +170,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
 
     // Check total size of uploads directory
     $currentTotalSize = getDirectorySize($uploadDir);
-    if ($currentTotalSize === false || $currentTotalSize + $file['size'] > $maxTotalSize) {
-        // Try to delete the oldest file to make space
+    if ($currentTotalSize === false) {
+        http_response_code(500);
+        echo 'Failed to calculate the total size of the upload directory.';
+        exit;
+    }
+
+    while ($currentTotalSize + $file['size'] > $maxTotalSize) {
         if (!deleteOldestFile($uploadDir)) {
             http_response_code(500);
             echo 'Failed to delete the oldest file to maintain total size limit.';
+            exit;
+        }
+        $currentTotalSize = getDirectorySize($uploadDir);
+        if ($currentTotalSize === false) {
+            http_response_code(500);
+            echo 'Failed to calculate the total size of the upload directory.';
             exit;
         }
     }
