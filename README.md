@@ -8,10 +8,21 @@ Anonymous file upload offers several key benefits. Primarily, it ensures user pr
 <!-- FEATURES -->
 ## Features:
 
-- Stores uploaded file for 30 days
+- Stores uploaded file for 360 days
 - Rate limiting
-- Randomization of uploaded file name for privacy
 - Built in PHP
+- Docker support
+
+<!-- QUICKSTART -->
+## Quickstart:
+
+```
+git clone https://github.com/umutcamliyurt/Anon-File-Upload
+cd Anon-File-Upload/
+docker build -t anon_file_upload .
+docker run -d -p 80:80 -v .:/var/www/html --name anon_file_upload anon_file_upload
+```
+- Open [http://localhost/](http://localhost/)
 
 ## Technical details:
 
@@ -36,3 +47,9 @@ Anonymous file upload offers several key benefits. Primarily, it ensures user pr
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+## Donate to support development of this project!
+
+**Monero(XMR):** 88a68f2oEPdiHiPTmCc3ap5CmXsPc33kXJoWVCZMPTgWFoAhhuicJLufdF1zcbaXhrL3sXaXcyjaTaTtcG1CskB4Jc9yyLV
+
+**Bitcoin(BTC):** bc1qn42pv68l6erl7vsh3ay00z8j0qvg3jrg2fnqv9

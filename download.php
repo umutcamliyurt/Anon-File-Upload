@@ -3,7 +3,7 @@ session_start();
 
 // Function to check if the request exceeds the allowed rate limit
 function isRateLimited() {
-    $maxRequestsPerMinute = 2; // Adjust this as needed
+    $maxRequestsPerMinute = 20; // Adjust this as needed
 
     if (!isset($_SESSION['requests'])) {
         $_SESSION['requests'] = [];
@@ -74,4 +74,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['file'])) {
 
 http_response_code(400);
 echo 'Invalid request.';
-?>

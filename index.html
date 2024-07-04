@@ -6,10 +6,10 @@
     <title>Anon File Upload</title>
     <style>
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            background-color: #121212;
-            color: #e0e0e0;
+            background-color: #0d1117;
+            color: #e6edf3;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -17,104 +17,116 @@
             align-items: center;
             min-height: 100vh;
         }
+
         .container {
             width: 100%;
-            max-width: 600px;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            max-width: 500px;
+            background: #161b22;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid #30363d;
         }
+
         h2 {
-            color: #ffffff;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 5px;
+            color: #ff0000;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 8px;
             display: flex;
             align-items: center;
+            font-weight: 600;
         }
+
         h2 img {
-            margin-right: 3px;
-            height: 30px;
+            margin-right: 2px;
+            height: 32px;
         }
+
         form {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: flex;
             flex-direction: column;
+            gap: 12px;
         }
-        input[type=file] {
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 10px;
-            border: 1px solid #444;
-            border-radius: 4px;
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            box-sizing: border-box;
+
+        input[type="file"] {
+            display: none;
         }
-        button[type=submit] {
-            padding: 10px 20px;
-            background-color: skyblue;
+
+        .custom-file-upload, button[type=submit] {
+            padding: 12px;
+            background: linear-gradient(135deg, #238636, #2ea043);
             color: #ffffff;
+            font-weight: 600;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            align-self: center;
+            text-align: center;
+            transition: transform 0.2s ease, background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        button[type=submit]:hover {
-            background-color: blue;
+
+        .custom-file-upload:hover, button[type=submit]:hover {
+            background: linear-gradient(135deg, #2ea043, #3fb950);
+            transform: scale(1.05);
         }
+
         .download-link {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #2e2e2e;
-            border: 1px solid #444;
-            border-radius: 4px;
+            margin-top: 12px;
+            padding: 12px;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            text-align: center;
             word-wrap: break-word;
+            font-size: 14px;
         }
+
         .footer-links {
             margin-top: 20px;
             text-align: center;
         }
+
         .footer-links a {
-            color: #ccc;
+            color: #58a6ff;
             text-decoration: none;
-            margin: 0 10px;
+            margin: 0 8px;
+            transition: color 0.2s ease;
         }
+
         .footer-links a:hover {
-            color: #fff;
+            color: #79c0ff;
         }
-        .storage-message,
-        .donate-message {
+
+        .storage-message {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 14px;
-            color: #ccc;
-            word-wrap: break-word;
+            color: #8b949e;
         }
-        .donate-message strong {
-            display: block;
-            margin-top: 10px;
-        }
+
         progress {
             width: 100%;
-            height: 10px;
-            margin-top: 10px;
+            height: 12px;
+            margin-top: 12px;
             display: none;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: #30363d;
         }
-        progress[value] {
-            background-color: #2e2e2e;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
-        }
+
         progress[value]::-webkit-progress-value {
-            background-color: skyblue;
-            border-radius: 5px;
+            background: linear-gradient(90deg, #ffa600, #ff4500);
+            border-radius: 6px;
         }
+
         progress[value]::-moz-progress-bar {
-            background-color: skyblue;
-            border-radius: 5px;
+            background: linear-gradient(90deg, #ffa600, #ff4500);
+            border-radius: 6px;
         }
 
     </style>
@@ -123,19 +135,14 @@
     <div class="container">
         <h2><img src="logo.png" alt="Logo">non File Upload</h2>
         <form id="upload-form">
+            <label for="file-input" class="custom-file-upload">Choose File</label>
             <input type="file" id="file-input" required>
             <button type="submit">Upload</button>
-            <!-- Progress bar -->
             <progress id="upload-progress" value="0" max="100"></progress>
-        </form>
+        </form>        
 
         <div class="storage-message">
-            Files are encrypted client-side and stored for 30 days. Max. file size: 2GB
-        </div>
-
-        <div class="donate-message">
-            Keep this project alive by donating XMR to address:
-            <strong>87QyZJVYam8GRwj5Tc7WUqJ6mtFu2MRVpSpdH6buaYUbgs2vmx44wiZ33X3yN4gGm44XDaZD3G8WdN3NJPNyC5i8Qr2Xx3J</strong>
+            Files are encrypted client-side and stored for 360 days. Max. file size: 500MB
         </div>
 
         <div id="link-container" class="download-link" style="display: none;">
@@ -147,6 +154,7 @@
             <a href="https://github.com/umutcamliyurt/Anon-File-Upload" target="_blank">Source Code</a>
             <a href="/privacy-policy.html">Privacy Policy</a>
             <a href="/terms-of-use.html">Terms of Use</a>
+            <a href="https://github.com/umutcamliyurt/Anon-File-Upload?tab=readme-ov-file#donate-to-support-development-of-this-project">Donate ❤️</a>
         </div>
     </div>
 
