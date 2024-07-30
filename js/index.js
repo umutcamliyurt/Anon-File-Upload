@@ -1,5 +1,3 @@
-import '/mdui/mdui.esm.js';
-
 async function generateKey() {
     return window.crypto.subtle.generateKey(
         {
@@ -71,7 +69,7 @@ document.getElementById('upload-form').addEventListener('submit', async (e) => {
     xhr.onload = async function () {
         if (xhr.status === 200) {
             const fileName = xhr.responseText;
-            const downloadLink = `${window.location.origin}/download.html#${exportedKey}-${fileName}`;
+            const downloadLink = `${window.location.origin}/downloader.php#${exportedKey}-${fileName}`;
 
             // Display the download link on the page
             document.getElementById('download-link').style.display = 'block';

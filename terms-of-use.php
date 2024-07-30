@@ -1,3 +1,43 @@
+<?php
+
+$jsFilePaths = [
+    './js/languageSwitcher.js'
+];
+
+$cssFilePaths = [
+    './styles/terms-of-use.css'
+];
+
+// Initialize an array to hold the hashes
+$js_quoted_hashes = [];
+$js_unquoted_hashes = [];
+
+$css_unquoted_hashes = [];
+
+function generateHash($filePath)
+{
+    $fileContent = file_get_contents($filePath);
+    return "sha256-" . base64_encode(hash('sha256', $fileContent, true));
+}
+
+// Generate hashes for JavaScript files
+foreach ($jsFilePaths as $jsFilePath) {
+    $js_quoted_hashes[] = "'" . generateHash($jsFilePath) . "'";
+    $js_unquoted_hashes[] = generateHash($jsFilePath);
+}
+
+// Generate hashes for CSS files
+foreach ($cssFilePaths as $cssFilePath) {
+    $css_unquoted_hashes[] = generateHash($cssFilePath);
+}
+
+// Convert the hashes array to a string for the CSP header
+$jsHashesStr = implode(' ', $js_quoted_hashes);
+
+header("Content-Security-Policy: default-src 'none'; script-src $jsHashesStr; style-src-elem 'self';");
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,84 +46,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Use</title>
 
+    <link rel="stylesheet" href="/styles/terms-of-use.css" integrity="<?php echo $css_unquoted_hashes[0]; ?>">
+    <script async type="text/javascript" src="/js/languageSwitcher.js" integrity="<?php echo $js_unquoted_hashes[0]; ?>"></script>
 
-    <script type="text/javascript" src="/js/languageSwitcher.js"
-        integrity="sha256-/U25f4s/XDWdN91tm2XdsybQ02BrOdneT5e/+fzaFPw= sha384-EuwzBEMD3Ei+S4fPP3/pGUF/uJSNEzlCnvVfIMXNYUN+8MSr+8gkqLVPrrdIOq/c sha512-mQB9O22ndTR5gToXMWBd4Gl0pB5FcK1bl7Gq5v4kProbp/QGGUUles11HSAps1vANdsycNoO0pg8dGSrYexmBw==">
-        </script>
-
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #1e1e1e;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        h1 {
-            color: #ffffff;
-            border-bottom: 1px solid #444;
-            padding-bottom: 5px;
-        }
-
-        p {
-            margin-bottom: 20px;
-        }
-
-        pre {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 10px;
-            border-radius:
-                4px;
-            overflow-x: auto;
-        }
-
-        a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .language-switcher {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-
-        .language-switcher button {
-            background: #3498db;
-            color: #ffffff;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .language-switcher button:hover {
-            background: #2980b9;
-        }
-    </style>
 </head>
 
 <body>
     <div class="container">
         <div class="language-switcher">
-            <button onclick="switchLanguage('en')">English</button> <button
-                onclick="switchLanguage('tr')">Türkçe</button>
+            <button id="lang-en-btn">English</button> 
+            <button id="lang-tr-btn">Türkçe</button>
         </div>
-        <div id="lang-en">
+        <div id="lang-en" class="block">
             <h1>Terms of Use</h1>
             <p>By accessing this website or
                 using the software/service provided, you agree to the following terms and
@@ -163,7 +137,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             <p>Users of this service are responsible for complying with all applicable
                 laws and regulations.</p>
         </div>
-        <div id="lang-tr" style="display: none;">
+        <div id="lang-tr" class="hidden">
             <h1>Kullanım Koşulları</h1>
             <p>Bu
                 web sitesine erişerek veya sağlanan yazılım/hizmeti kullanarak, aşağıdaki

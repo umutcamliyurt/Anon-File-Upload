@@ -1,6 +1,9 @@
 # Use the official PHP image with Apache
 FROM php:8.3-apache
 
+# Necessary to set headers using php such as the CSP header
+RUN a2enmod headers
+
 # Copy your PHP files to the container
 COPY . /var/www/html/
 
