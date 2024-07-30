@@ -74,4 +74,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['file'])) {
 
 http_response_code(400);
 echo 'Invalid request.';
-?>

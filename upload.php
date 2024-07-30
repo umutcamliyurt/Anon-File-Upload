@@ -18,18 +18,43 @@ $maxTotalSize = 40 * 1024 * 1024 * 1024; // 40 GB
 
 // Allowed MIME types
 $allowedMimeTypes = [
-    'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-    'video/webm', 'video/mp4', 'audio/wav', 'audio/mpeg', 'audio/ogg',
-    'application/zip', 'application/x-rar-compressed', 'application/x-7z-compressed',
-    'application/pdf', 'text/plain', 'application/msword',
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'video/webm',
+    'video/mp4',
+    'audio/wav',
+    'audio/mpeg',
+    'audio/ogg',
+    'application/zip',
+    'application/x-rar-compressed',
+    'application/x-7z-compressed',
+    'application/pdf',
+    'text/plain',
+    'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ];
 
 // Allowed file extensions (fallback)
 $allowedExtensions = [
-    'jpg', 'jpeg', 'png', 'gif', 'webp',
-    'webm', 'mp4', 'wav', 'mp3', 'ogg',
-    'zip', 'rar', '7z', 'pdf', 'txt', 'doc', 'docx'
+    'jpg',
+    'jpeg',
+    'png',
+    'gif',
+    'webp',
+    'webm',
+    'mp4',
+    'wav',
+    'mp3',
+    'ogg',
+    'zip',
+    'rar',
+    '7z',
+    'pdf',
+    'txt',
+    'doc',
+    'docx'
 ];
 
 // Set security headers
@@ -207,4 +232,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     http_response_code(400);
     echo 'Invalid request.';
 }
-?>

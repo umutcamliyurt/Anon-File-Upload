@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download and Decrypt File</title>
+    <link rel="stylesheet" href="/mdui/mdui.css">
+    <link rel="stylesheet" href="/mdui/material-icons.css">
+    <script type="module" src="/js/download.js"
+        integrity="sha384-F8L3xvIJS+oYZrMs1RLpNjKUXMYwtmGQInbnCpJx0VL32GrVUsIpq1OCWY+G7qzp"></script>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -17,14 +22,17 @@
             align-items: center;
             min-height: 100vh;
         }
+
         .container {
             width: 100%;
             max-width: 600px;
             background: #1e1e1e;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
         }
+
         h2 {
             color: #ffffff;
             margin-bottom: 20px;
@@ -32,11 +40,14 @@
             padding-bottom: 5px;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
+
         h2 img {
             margin-right: 5px;
             height: 30px;
         }
+
         #message {
             margin-top: 20px;
             padding: 10px;
@@ -45,101 +56,42 @@
             border-radius: 4px;
             word-wrap: break-word;
         }
+
         .footer-links {
             margin-top: 20px;
             text-align: center;
         }
+
         .footer-links a {
             color: #ccc;
             text-decoration: none;
             margin: 0 10px;
         }
+
         .footer-links a:hover {
             color: #fff;
         }
+
+        mdui-button {
+            margin: 5px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h2><img src="logo.png" alt="Logo">Download and Decrypt File</h2>
-        <div id="message">Decrypting file...</div>
+        <h2><img src="logo.svg" alt="Logo">Download and Decrypt File</h2>
+        <mdui-card variant="filled" id="message" class="message">Decrypting file...</mdui-card>
+
         <div class="footer-links">
-            <a href="mailto:nemesisuks@protonmail.com">Report Abuse</a>
-            <a href="https://github.com/umutcamliyurt/Anon-File-Upload" target="_blank">Source Code</a>
-            <a href="/privacy-policy.html">Privacy Policy</a>
-            <a href="/terms-of-use.html">Terms of Use</a>
+            <mdui-button href="mailto:nemesisuks@protonmail.com" variant="outlined">Report Abuse</mdui-button>
+            <mdui-button href="https://github.com/umutcamliyurt/Anon-File-Upload" target="_blank"
+                variant="outlined">Source Code</mdui-button>
+            <mdui-button href="/privacy-policy.html" variant="outlined">Privacy Policy</mdui-button>
+            <mdui-button href="/terms-of-use.html" variant="outlined">Terms of Use</mdui-button>
         </div>
     </div>
-    <script>
-        async function importKey(hexKey) {
-            const keyBuffer = new Uint8Array(hexKey.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-            return window.crypto.subtle.importKey(
-                "raw",
-                keyBuffer,
-                { name: "AES-GCM" },
-                true,
-                ["decrypt"]
-            );
-        }
 
-        async function decryptFile(encryptedBuffer, iv, key) {
-            const algorithm = {
-                name: "AES-GCM",
-                iv: iv
-            };
-            return window.crypto.subtle.decrypt(
-                algorithm,
-                key,
-                encryptedBuffer
-            );
-        }
-
-        async function downloadDecryptedFile(fileName, decryptedBuffer) {
-            const blob = new Blob([decryptedBuffer]);
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        async function startDecryption() {
-            const hash = window.location.hash.substring(1);
-            const parts = hash.split('-');
-            const fileName = parts.slice(1).join('-');  // Join all parts except the first one which is the key
-            const keyHex = parts[0];
-
-            if (!keyHex || !fileName) {
-                document.getElementById('message').textContent = 'Invalid download link.';
-                return;
-            }
-
-            const response = await fetch('download.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ file: fileName })
-            });
-
-            if (!response.ok) {
-                document.getElementById('message').textContent = 'File download failed.';
-                return;
-            }
-
-            const encryptedBlob = await response.blob();
-            const arrayBuffer = await encryptedBlob.arrayBuffer();
-            const iv = new Uint8Array(arrayBuffer.slice(0, 12));
-            const encryptedBuffer = arrayBuffer.slice(12);
-            const key = await importKey(keyHex);
-            const decryptedBuffer = await decryptFile(encryptedBuffer, iv, key);
-
-            await downloadDecryptedFile(fileName, decryptedBuffer);
-            document.getElementById('message').textContent = 'File decrypted and downloaded.';
-        }
-
-        window.onload = startDecryption;
-    </script>
 </body>
+
 </html>
