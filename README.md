@@ -24,7 +24,7 @@ cd Anon-File-Upload/
 docker build -t anon_file_upload .
 docker run -d -p 80:80 -v .:/var/www/html --name anon_file_upload anon_file_upload
 ```
-Open [http://localhost/](http://localhost/)
+- Open [http://localhost/](http://localhost/)
 
 ## Technical details:
 
