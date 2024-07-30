@@ -1,87 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy</title>
-    <script type="text/javascript" src="/js/languageSwitcher.js"
-        integrity="sha384-EuwzBEMD3Ei+S4fPP3/pGUF/uJSNEzlCnvVfIMXNYUN+8MSr+8gkqLVPrrdIOq/c"></script>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 20px;
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" 
+    content="width=device-width, initial-scale=1.0"> <title>Privacy Policy</title> <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; 
+            background-color: #121212; color: #e0e0e0; margin: 20px;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #1e1e1e;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; background: #1e1e1e; 
+            border-radius: 12px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
-
-        h1 {
-            color: #ffffff;
-            border-bottom: 1px solid #444;
-            padding-bottom: 5px;
+        h1 { color: #ffffff; border-bottom: 1px solid #444; padding-bottom: 5px;
         }
-
-        p {
-            margin-bottom: 20px;
+        p { margin-bottom: 20px;
         }
-
-        a {
-            color: #3498db;
-            text-decoration: none;
+        a { color: #3498db; text-decoration: none;
         }
-
-        a:hover {
-            text-decoration: underline;
+        a:hover { text-decoration: underline;
         }
-
-        .language-switcher {
-            text-align: right;
-            margin-bottom: 20px;
+        .language-switcher { text-align: right; margin-bottom: 20px;
         }
-
-        .language-switcher button {
-            background: #3498db;
-            color: #ffffff;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
+        .language-switcher button { background: #3498db; color: #ffffff; border: none; 
+            padding: 10px; cursor: pointer; border-radius: 5px;
         }
-
-        .language-switcher button:hover {
-            background: #2980b9;
+        .language-switcher button:hover { background: #2980b9;
         }
-    </style>
-
-</head>
-
-<body>
-    <div class="container">
-        <div class="language-switcher">
-            <button onclick="switchLanguage('en')">English</button>
-            <button onclick="switchLanguage('tr')">Türkçe</button>
-        </div>
-        <div id="lang-en">
-            <h1>Privacy Policy</h1>
-            <p>This website does not collect any personally identifiable information (PII) from its users.</p>
-            <p>Last updated: <time datetime="2024-06-24">June 24, 2024</time></p>
-        </div>
-        <div id="lang-tr" style="display: none;">
-            <h1>Gizlilik Politikası</h1>
-            <p>Bu web sitesi, kullanıcılarından herhangi bir kişisel olarak tanımlanabilir bilgi toplamaz.</p>
-            <p>Son güncelleme: <time datetime="2024-06-24">24 Haziran 2024</time></p>
-        </div>
-    </div>
-</body>
-
+    </style> <script type="text/javascript"> function switchLanguage(language) { const 
+            enContent = document.getElementById('lang-en'); const trContent = 
+            document.getElementById('lang-tr'); if (language === 'en') {
+                enContent.style.display = 'block'; trContent.style.display = 'none';
+            } else if (language === 'tr') {
+                enContent.style.display = 'none'; trContent.style.display = 'block';
+            }
+        }
+    </script> </head> <body> <div class="container"> <div class="language-switcher"> 
+            <button onclick="switchLanguage('en')">English</button> <button 
+            onclick="switchLanguage('tr')">Türkçe</button>
+        </div> <div id="lang-en"> <h1>Privacy Policy</h1> <p>This website does not collect 
+            any personally identifiable information (PII) from its users.</p> <p>Last 
+            updated: <time datetime="2024-06-24">June 24, 2024</time></p>
+        </div> <div id="lang-tr" style="display: none;"> <h1>Gizlilik Politikası</h1> 
+            <p>Bu web sitesi, kullanıcılarından herhangi bir kişisel olarak tanımlanabilir 
+            bilgi toplamaz.</p> <p>Son güncelleme: <time datetime="2024-06-24">24 Haziran 
+            2024</time></p>
+        </div> </div> </body>
 </html>
