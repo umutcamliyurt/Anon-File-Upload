@@ -20,4 +20,3 @@ function deleteOldFiles($dir)
 
 // Call the function to delete old files
 deleteOldFiles($uploadDir);
-?>

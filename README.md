@@ -12,6 +12,13 @@ Anonymous file upload offers several key benefits. Primarily, it ensures user pr
 - Rate limiting
 - Randomization of uploaded file name for privacy
 - Built in PHP
+- Material You frontend components
+- Docker support
+
+## Quickstart:
+- docker build -t anon_file_upload .
+- docker run -d -p 80:80 -v .:/var/www/html --name anon_file_upload anon_file_upload
+- Open [http://localhost/](http://localhost/)
 
 ## Technical details:
 
