@@ -7,6 +7,13 @@ RUN a2enmod headers
 # Copy your PHP files to the container
 COPY . /var/www/html/
 
+# create certificates and enable https
+RUN set -eux; \
+    apt-get update; \
+    apt-get install ssl-cert; \
+    a2enmod ssl; \
+    a2ensite default-ssl
+
 # Change working directory to the document root
 WORKDIR /var/www/html
 
