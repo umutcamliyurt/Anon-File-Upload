@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-// Regenerate session ID to prevent session fixation
-session_regenerate_id(true);
-
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -129,6 +126,41 @@ function isRateLimited()
     return false;
 }
 
+// Function to check if the same file is being uploaded too frequently
+function isRepeatedFileUpload($fileName)
+{
+    $maxUploadsPerFile = 1; // Number of allowed uploads for the same file within the time window
+    $timeWindow = 600; // Time window in seconds (e.g., 600 seconds = 10 minutes)
+
+    if (!isset($_SESSION['uploaded_files'])) {
+        $_SESSION['uploaded_files'] = [];
+    }
+
+    $currentTime = time();
+
+    // Remove old entries (uploads older than the time window)
+    $_SESSION['uploaded_files'] = array_filter($_SESSION['uploaded_files'], function ($data) use ($currentTime, $timeWindow) {
+        return $data['timestamp'] >= $currentTime - $timeWindow;
+    });
+
+    // Check if the file is being uploaded too frequently
+    $fileUploads = array_filter($_SESSION['uploaded_files'], function ($data) use ($fileName) {
+        return $data['file_name'] === $fileName;
+    });
+
+    if (count($fileUploads) >= $maxUploadsPerFile) {
+        return true;
+    }
+
+    // Add the current file upload to the session
+    $_SESSION['uploaded_files'][] = [
+        'file_name' => $fileName,
+        'timestamp' => $currentTime
+    ];
+
+    return false;
+}
+
 // Ensure the request method is POST and the file is uploaded
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     // Check if rate limit is exceeded
@@ -177,6 +209,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
                 exit;
             }
         }
+    }
+
+    // Check if the same file is being uploaded too frequently
+    $fileName = basename($file['name']);
+    if (isRepeatedFileUpload($fileName)) {
+        http_response_code(429); // 429 Too Many Requests
+        echo 'The same file is being uploaded too frequently. Please wait before trying again.';
+        exit;
     }
 
     // Ensure upload directory exists
@@ -232,3 +272,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     http_response_code(400);
     echo 'Invalid request.';
 }
+?>
