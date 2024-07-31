@@ -37,8 +37,15 @@ foreach ($cssFilePaths as $cssFilePath) {
 // Convert the hashes array to a string for the CSP header
 $jsHashesStr = implode(' ', $js_quoted_hashes);
 
-header("Content-Security-Policy: default-src 'none'; script-src $jsHashesStr; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self';");
-
+header("Content-Security-Policy: default-src 'none'; script-src $jsHashesStr; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types lit-html forceInner");
+header("Cross-Origin-Embedder-Policy: require-corp");
+header("Cross-Origin-Opener-Policy: same-origin");
+header("Cross-Origin-Resource-Policy: same-origin");
+header("Permissions-Policy: accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), bluetooth=(), camera=(), clipboard-read=(), clipboard-write=(), display-capture=(), document-domain=(), encrypted-media=(), fullscreen=(), gamepad=(), geolocation=(), gyroscope=(), hid=(), idle-detection=(), interest-cohort=(), keyboard-map=(), local-fonts=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), speaker-selection=(), sync-xhr=(), usb=(), xr-spatial-tracking=()");
+header("Referrer-Policy: no-referrer");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 0");
 ?>
 
 <!DOCTYPE html>
