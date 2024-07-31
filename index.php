@@ -12,6 +12,7 @@ $cssFilePaths = [
 ];
 
 // Initialize an array to hold the hashes
+$js_quoted_hashes = [];
 $js_unquoted_hashes = [];
 
 $css_unquoted_hashes = [];
@@ -24,6 +25,7 @@ function generateHash($filePath)
 
 // Generate hashes for JavaScript files
 foreach ($jsFilePaths as $jsFilePath) {
+    $js_quoted_hashes[] = "'" . generateHash($jsFilePath) . "'";
     $js_unquoted_hashes[] = generateHash($jsFilePath);
 }
 
@@ -32,7 +34,10 @@ foreach ($cssFilePaths as $cssFilePath) {
     $css_unquoted_hashes[] = generateHash($cssFilePath);
 }
 
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types lit-html forceInner");
+// Convert the hashes array to a string for the CSP header
+$jsHashesStr = implode(' ', $js_quoted_hashes);
+
+header("Content-Security-Policy: default-src 'none'; script-src $jsHashesStr; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types lit-html forceInner");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Resource-Policy: same-origin");
