@@ -37,7 +37,7 @@ foreach ($cssFilePaths as $cssFilePath) {
 // Convert the hashes array to a string for the CSP header
 $jsHashesStr = implode(' ', $js_quoted_hashes);
 
-header("Content-Security-Policy: default-src 'none'; script-src $jsHashesStr; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types lit-html forceInner");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' $jsHashesStr; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types lit-html forceInner");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Resource-Policy: same-origin");
@@ -59,8 +59,8 @@ header("X-XSS-Protection: 0");
     <link rel="stylesheet" href="/mdui/mdui.css" integrity="<?php echo $css_unquoted_hashes[1]; ?>">
     <link rel="stylesheet" href="/mdui/material-icons.css" integrity="<?php echo $css_unquoted_hashes[2]; ?>">
     
-    <script async src="/js/index.js" integrity="<?php echo $js_unquoted_hashes[0]; ?>"></script>
-    <script async src="/mdui/mdui.global.js" integrity="<?php echo $js_unquoted_hashes[1]; ?>"></script>
+    <script defer src="/js/index.js" integrity="<?php echo $js_unquoted_hashes[0]; ?>"></script>
+    <script defer src="/mdui/mdui.global.js" integrity="<?php echo $js_unquoted_hashes[1]; ?>"></script>
 
 </head>
 

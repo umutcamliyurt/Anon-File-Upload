@@ -34,7 +34,7 @@ foreach ($cssFilePaths as $cssFilePath) {
 // Convert the hashes array to a string for the CSP header
 $jsHashesStr = implode(' ', $js_quoted_hashes);
 
-header("Content-Security-Policy: default-src 'none'; script-src $jsHashesStr; style-src-elem 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types 'none'");
+header("Content-Security-Policy: default-src 'none'; script-src 'self' $jsHashesStr; style-src-elem 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'none'; require-trusted-types-for 'script'; trusted-types 'none'");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Resource-Policy: same-origin");
@@ -54,7 +54,7 @@ header("X-XSS-Protection: 0");
     <title>Terms of Use</title>
 
     <link rel="stylesheet" href="/styles/terms-of-use.css" integrity="<?php echo $css_unquoted_hashes[0]; ?>">
-    <script async type="text/javascript" src="/js/languageSwitcher.js" integrity="<?php echo $js_unquoted_hashes[0]; ?>"></script>
+    <script defer type="text/javascript" src="/js/languageSwitcher.js" integrity="<?php echo $js_unquoted_hashes[0]; ?>"></script>
 
 </head>
 
