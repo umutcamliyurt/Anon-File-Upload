@@ -1,4 +1,3 @@
-import '/mdui/mdui.esm.js';
 async function importKey(hexKey) {
     const keyBuffer = new Uint8Array(hexKey.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
     return window.crypto.subtle.importKey(

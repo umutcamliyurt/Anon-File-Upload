@@ -1,8 +1,18 @@
 # Use the official PHP image with Apache
 FROM php:8.3-apache
 
+# Necessary to set headers using php such as the CSP header
+RUN a2enmod headers
+
 # Copy your PHP files to the container
 COPY . /var/www/html/
+
+# create certificates and enable https
+RUN set -eux; \
+    apt-get update; \
+    apt-get install ssl-cert; \
+    a2enmod ssl; \
+    a2ensite default-ssl
 
 # Change working directory to the document root
 WORKDIR /var/www/html

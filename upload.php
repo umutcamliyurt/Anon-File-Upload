@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -53,12 +53,6 @@ $allowedExtensions = [
     'doc',
     'docx'
 ];
-
-// Set security headers
-header('Content-Security-Policy: default-src \'self\';');
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
-header('X-XSS-Protection: 1; mode=block');
 
 // Function to calculate directory size recursively
 function getDirectorySize($path)
