@@ -34,6 +34,18 @@ async function exportKey(key) {
     return Array.from(new Uint8Array(exported)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+function sanitizeFilename(filename) {
+    return filename.replace(/[^A-Za-z0-9_\-\.]/g, '_');
+}
+
+function showCard(text, href)  {
+    document.getElementById('download-link').style.display = 'block';
+    document.getElementById('download-link').textContent = text;
+    if(href) {
+        document.getElementById('download-link').href = href;
+    }
+}
+
 document.getElementById('upload-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const fileInput = document.getElementById('file-input');
@@ -68,24 +80,22 @@ document.getElementById('upload-form').addEventListener('submit', async (e) => {
 
     xhr.onload = async function () {
         if (xhr.status === 200) {
-            const fileName = xhr.responseText;
-            const downloadLink = `${window.location.origin}/downloader.php#${exportedKey}-${fileName}`;
-
-            // Display the download link on the page
-            document.getElementById('download-link').style.display = 'block';
-            document.getElementById('download-link').href = downloadLink;
-            document.getElementById('download-link').textContent = 'File uploaded successfully. Download link: ' + downloadLink;
-
-            // Hide progress bar after upload completes
+            if(xhr.responseText.endsWith(sanitizeFilename(file.name))) {
+                const fileName = xhr.responseText;
+                const downloadLink = `${window.location.origin}/downloader.php#${exportedKey}-${fileName}`;
+                showCard('File uploaded successfully. Download link: ' + downloadLink, downloadLink);
+            } else {
+                showCard('File upload failed. Response code: ' + xhr.status + ' | Response text: ' + xhr.responseText);
+            }
             progressBar.style.display = 'none';
         } else {
-            alert('File upload failed.');
-            progressBar.style.display = 'none'; // Hide progress bar on error
+            showCard('File upload failed. Response code: ' + xhr.status + ' | Response text: ' + xhr.responseText);
         }
+        progressBar.style.display = 'none';
     };
 
     xhr.onerror = function () {
-        alert('File upload failed. Please try again.');
+        showCard('File upload failed. Response code: ' + xhr.status + ' | Response text: ' + xhr.responseText);
         progressBar.style.display = 'none'; // Hide progress bar on error
     };
 

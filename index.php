@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'set_headers.php';
 
 $jsFilePaths = [
@@ -44,7 +45,7 @@ $elements = setSecurityHeadersAndGenerateElements($jsFilePaths, $cssFilePaths);
             <strong>87QyZJVYam8GRwj5Tc7WUqJ6mtFu2MRVpSpdH6buaYUbgs2vmx44wiZ33X3yN4gGm44XDaZD3G8WdN3NJPNyC5i8Qr2Xx3J</strong>
         </div>
 
-        <mdui-card variant="filled" id="download-link" href="/" class="download-link">File uploaded
+        <mdui-card variant="filled" id="download-link" class="download-link">File uploaded
             successfully. Download link: </mdui-card>
 
         <div class="footer-links">
