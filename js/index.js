@@ -54,6 +54,8 @@ document.getElementById('upload-form').addEventListener('submit', async (e) => {
         return;
     }
 
+    document.getElementById('download-link').href = '';
+    document.getElementById('download-link').style.display = 'none';
     const file = fileInput.files[0];
     const key = await generateKey();
     const { iv, encryptedBuffer } = await encryptFile(file, key);
