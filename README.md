@@ -22,9 +22,9 @@ Anonymous file upload offers several key benefits. Primarily, it ensures user pr
 git clone https://github.com/umutcamliyurt/Anon-File-Upload
 cd Anon-File-Upload/
 docker build -t anon_file_upload .
-docker run -d -p 80:80 -v .:/var/www/html --name anon_file_upload anon_file_upload
+docker run -d -p 443:443 -v .:/var/www/html --name anon_file_upload anon_file_upload
 ```
-- Open [http://localhost/](http://localhost/)
+- Open [https://localhost/](https://localhost/)
 
 ## Technical details:
 
