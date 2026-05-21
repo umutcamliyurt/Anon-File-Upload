@@ -1,0 +1,31 @@
+# Deny access to PHP files
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
+
+# Deny access to CGI scripts
+<FilesMatch "\.(cgi|pl|py|sh)$">
+    Require all denied
+</FilesMatch>
+
+# Deny access to other potentially executable files
+<FilesMatch "\.(htaccess|htpasswd|ini|log|conf)$">
+    Require all denied
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes
+
+# Allow specific file types to be accessed
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|pdf|doc|docx|xls|xlsx|txt|zip|rar|enc|webm|mp4|7z)$">
+    Require all granted
+</FilesMatch>
+
+# Deny access to all other file types
+<FilesMatch ".*">
+    Require all denied
+</FilesMatch>
+
+# Disable script execution
+RemoveHandler .php .phtml .cgi .pl .py .sh
+RemoveType .php .phtml .cgi .pl .py .sh

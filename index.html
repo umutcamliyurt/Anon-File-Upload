@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anon File Upload</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #e6edf3;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(22, 27, 34, 0.85);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      border: 1px solid #30363d;
+    }
+
+    h2 {
+      color: #ff0000;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #30363d;
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    h2 img {
+      margin-right: 2px;
+      height: 32px;
+    }
+
+    form {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .btn {
+      padding: 12px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #ffffff;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-file {
+      background: linear-gradient(135deg, rgba(40, 40, 40, 0.6), rgba(80, 80, 80, 0.6));
+      backdrop-filter: blur(2px);
+    }
+
+    .btn-file:hover {
+      background: linear-gradient(135deg, rgba(60, 60, 60, 0.7), rgba(100, 100, 100, 0.7));
+    }
+
+
+    .btn-upload {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    }
+
+    .btn-upload:hover {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+    }
+
+
+    .download-link {
+      margin-top: 15px;
+      padding: 12px;
+      background-color: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      text-align: center;
+      word-wrap: break-word;
+      font-size: 14px;
+      color: #58a6ff;
+    }
+
+    .download-link a {
+      color: #58a6ff;
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .footer-links a {
+      color: #58a6ff;
+      text-decoration: none;
+      margin: 0 8px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #79c0ff;
+    }
+
+    .storage-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      background-color: #21262d;
+      padding: 15px;
+      border-left: 5px solid #2ea043;
+      border-radius: 5px;
+      color: #e6edf3;
+    }
+
+    .storage-message strong {
+      color: #2ea043;
+    }
+
+    .storage-message .warning {
+      color: #e74c3c;
+    }
+
+    progress {
+      width: 100%;
+      height: 12px;
+      margin-top: 12px;
+      display: none;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: #30363d;
+    }
+
+    progress[value]::-webkit-progress-value {
+      background: linear-gradient(90deg, #ffa600, #ff4500);
+      border-radius: 6px;
+    }
+
+    progress[value]::-moz-progress-bar {
+      background: linear-gradient(90deg, #ffa600, #ff4500);
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>
+      <img src="logo.png" alt="Logo">
+      <span>non File Upload</span>
+    </h2>
+
+    <form id="upload-form">
+      <label for="file-input" class="btn btn-file">
+        Choose File
+      </label>
+      <input type="file" id="file-input" required>
+      <button type="submit" class="btn btn-upload">Upload</button>
+      <progress id="upload-progress" value="0" max="100"></progress>
+    </form>
+
+    <div class="storage-message">
+      <p>
+        All files are <strong>encrypted on the client side</strong> and stored for 60 days. Max file size: 500MB.
+      </p>
+      <p>
+        <strong class="warning">Warning:</strong> JavaScript is required for this service
+      </p>
+    </div>
+
+    <div id="link-container" class="download-link" style="display: none;">
+      <strong>File uploaded successfully.</strong> Download link: 
+      <a id="download-link" href="#"></a>
+    </div>
+
+    <div class="footer-links">
+      <a href="https://git.disroot.org/umutcamliyurt/Anon-File-Upload" target="_blank" rel="noopener">Source Code</a>
+    </div>
+  </div>
+
+  <script>
+    async function generateKey() {
+      return window.crypto.subtle.generateKey(
+        { name: "AES-GCM", length: 256 },
+        true,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    async function encryptFile(file, key) {
+      const iv = window.crypto.getRandomValues(new Uint8Array(12));
+      const algorithm = { name: "AES-GCM", iv: iv };
+
+      const fileBuffer = await file.arrayBuffer();
+      const encryptedBuffer = await window.crypto.subtle.encrypt(
+        algorithm,
+        key,
+        fileBuffer
+      );
+
+      return { iv, encryptedBuffer };
+    }
+
+    async function exportKey(key) {
+      const exported = await window.crypto.subtle.exportKey("raw", key);
+      return Array.from(new Uint8Array(exported))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('file-input');
+      if (fileInput.files.length === 0) {
+        alert('Please select a file.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const key = await generateKey();
+      const { iv, encryptedBuffer } = await encryptFile(file, key);
+      const exportedKey = await exportKey(key);
+
+      const formData = new FormData();
+      formData.append('file', new Blob([iv, encryptedBuffer], { type: file.type }), file.name);
+
+      const progressBar = document.getElementById('upload-progress');
+      progressBar.style.display = 'block';
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'upload.php', true);
+
+      xhr.upload.addEventListener('progress', function(event) {
+        if (event.lengthComputable) {
+          progressBar.value = (event.loaded / event.total) * 100;
+        }
+      });
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const fileName = xhr.responseText;
+          const downloadLink = `${window.location.origin}/download.html#${exportedKey}-${fileName}`;
+          document.getElementById('link-container').style.display = 'block';
+          document.getElementById('download-link').href = downloadLink;
+          document.getElementById('download-link').textContent = downloadLink;
+        } else {
+          alert('File upload failed.');
+        }
+        progressBar.style.display = 'none';
+      };
+
+      xhr.onerror = function() {
+        alert('File upload failed. Please try again.');
+        progressBar.style.display = 'none';
+      };
+
+      xhr.send(formData);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download and Decrypt File</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            background-color: #0d1117;
+            color: #e6edf3;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #161b22;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid #30363d;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        #message {
+            margin-top: 12px;
+            padding: 12px;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            text-align: center;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links a {
+            color: #58a6ff;
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #79c0ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Download and Decrypt File</h2>
+        <div id="message">Decrypting file...</div>
+    </div>
+    <script>
+        async function importKey(hexKey) {
+            const keyBuffer = new Uint8Array(hexKey.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            return window.crypto.subtle.importKey(
+                "raw",
+                keyBuffer,
+                { name: "AES-GCM" },
+                true,
+                ["decrypt"]
+            );
+        }
+
+        async function decryptFile(encryptedBuffer, iv, key) {
+            const algorithm = {
+                name: "AES-GCM",
+                iv: iv
+            };
+            return window.crypto.subtle.decrypt(
+                algorithm,
+                key,
+                encryptedBuffer
+            );
+        }
+
+        async function downloadDecryptedFile(fileName, decryptedBuffer) {
+            const blob = new Blob([decryptedBuffer]);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        async function startDecryption() {
+            const hash = window.location.hash.substring(1);
+            const parts = hash.split('-');
+            const fileName = parts.slice(1).join('-');  // Join all parts except the first one which is the key
+            const keyHex = parts[0];
+
+            if (!keyHex || !fileName) {
+                document.getElementById('message').textContent = 'Invalid download link.';
+                return;
+            }
+
+            const response = await fetch('download.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ file: fileName })
+            });
+
+            if (!response.ok) {
+                document.getElementById('message').textContent = 'File download failed.';
+                return;
+            }
+
+            const encryptedBlob = await response.blob();
+            const arrayBuffer = await encryptedBlob.arrayBuffer();
+            const iv = new Uint8Array(arrayBuffer.slice(0, 12));
+            const encryptedBuffer = arrayBuffer.slice(12);
+            const key = await importKey(keyHex);
+            const decryptedBuffer = await decryptFile(encryptedBuffer, iv, key);
+
+            await downloadDecryptedFile(fileName, decryptedBuffer);
+            document.getElementById('message').textContent = 'File decrypted and downloaded.';
+        }
+
+        window.onload = startDecryption;
+    </script>
+</body>
+</html>
